@@ -21,6 +21,14 @@ A complete educational MongoDB project using the C# Driver to demonstrate backen
 * Create `UsersController` with RESTful actions
 * Test operations using Swagger UI or Postman
 
+### Day 3: Data Modeling and Mapping
+
+* Use MongoDB attributes (`[BsonId]`, `[BsonElement]`, `[BsonRepresentation]`, `[BsonDefaultValue]`)
+* Implement embedded documents (e.g., `Address` class inside `User`)
+* Implement references between collections (e.g., `Post` model with `AuthorId`)
+* Create `PostRepository` and `PostsController`
+* Add new methods for working with embedded documents
+
 ## Technologies
 
 * .NET 10

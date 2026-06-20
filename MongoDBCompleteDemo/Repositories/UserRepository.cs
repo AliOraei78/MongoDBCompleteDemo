@@ -37,5 +37,16 @@ namespace MongoDBCompleteDemo.Repositories
         {
             await _usersCollection.DeleteOneAsync(u => u.Id == id);
         }
+
+        public async Task AddAddressToUserAsync(string userId, Address address)
+        {
+            var update = Builders<User>.Update.Set(u => u.Address, address);
+            await _usersCollection.UpdateOneAsync(u => u.Id == userId, update);
+        }
+
+        public async Task<List<User>> GetUsersWithAddressAsync()
+        {
+            return await _usersCollection.Find(u => u.Address != null).ToListAsync();
+        }
     }
 }

@@ -17,5 +17,6 @@ namespace MongoDBCompleteDemo.Data
         }
 
         public IMongoCollection<User> Users => _database.GetCollection<User>("Users");
+        public IMongoCollection<Post> Posts => _database.GetCollection<Post>("Posts");
     }
 }

@@ -9,5 +9,7 @@ namespace MongoDBCompleteDemo.Repositories
         Task<User?> GetUserByIdAsync(string id);
         Task UpdateUserAsync(string id, User updatedUser);
         Task DeleteUserAsync(string id);
+        Task AddAddressToUserAsync(string userId, Address address);
+        Task<List<User>> GetUsersWithAddressAsync();
     }
 }

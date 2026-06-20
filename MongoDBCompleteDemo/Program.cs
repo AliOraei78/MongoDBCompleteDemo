@@ -10,7 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IUserRepository, UserRepository>();
-
+builder.Services.AddSingleton<IPostRepository, PostRepository>();
 builder.Services.AddSingleton<MongoDbContext>();
 
 var app = builder.Build();

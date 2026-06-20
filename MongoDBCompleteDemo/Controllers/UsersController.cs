@@ -23,7 +23,7 @@ namespace MongoDBCompleteDemo.Controllers
             // Map DTO to the actual User Domain Model
             var user = new User
             {
-                Name = createUserDto.Name,
+                FullName = createUserDto.FullName,
                 Email = createUserDto.Email,
                 Age = createUserDto.Age
                 // Id is left out entirely; MongoDB will auto-generate it!
@@ -61,7 +61,7 @@ namespace MongoDBCompleteDemo.Controllers
             var updatedUser = new User
             {
                 Id = id, // Keep the original string id from the URL route
-                Name = updateUserDto.Name,
+                FullName = updateUserDto.FullName,
                 Email = updateUserDto.Email,
                 Age = updateUserDto.Age
             };
@@ -78,6 +78,20 @@ namespace MongoDBCompleteDemo.Controllers
 
             await _userRepository.DeleteUserAsync(id);
             return NoContent();
+        }
+
+        [HttpPatch("{id}/address")]
+        public async Task<IActionResult> AddAddress(string id, [FromBody] Models.Address address)
+        {
+            await _userRepository.AddAddressToUserAsync(id, address);
+            return NoContent();
+        }
+
+        [HttpGet("with-address")]
+        public async Task<ActionResult<List<User>>> GetUsersWithAddress()
+        {
+            var users = await _userRepository.GetUsersWithAddressAsync();
+            return Ok(users);
         }
     }
 }
