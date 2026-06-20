@@ -4,7 +4,22 @@ A complete educational MongoDB project using the C# Driver to demonstrate backen
 
 ## Current Progress
 
-* Day 1: Environment setup and initial connection ✓
+### Day 1: Introduction and Environment Setup
+
+* Create an ASP.NET Core Web API project in Visual Studio
+* Install the `MongoDB.Driver` package
+* Implement `MongoDbContext` for database connectivity
+* Define the initial `User` model
+* Configure `appsettings.json` and Dependency Injection
+* Create a test controller to verify the connection
+
+### Day 2: Basic CRUD Operations
+
+* Create the `IUserRepository` interface and implement `UserRepository`
+* Implement full CRUD operations (Create, Read, Update, Delete)
+* Register the repository in `Program.cs` with Singleton lifetime
+* Create `UsersController` with RESTful actions
+* Test operations using Swagger UI or Postman
 
 ## Technologies
 
