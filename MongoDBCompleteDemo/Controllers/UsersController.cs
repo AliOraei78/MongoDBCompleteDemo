@@ -173,5 +173,32 @@ namespace MongoDBCompleteDemo.Controllers
 
             return Ok(jsonResult);
         }
+        [HttpPost("create-indexes")]
+        public async Task<IActionResult> CreateIndexes()
+        {
+            await _userRepository.CreateIndexesAsync();
+            return Ok("Indexex created successfully");
+        }
+
+        [HttpGet("text-search")]
+        public async Task<ActionResult<List<User>>> TextSearch([FromQuery] string searchText)
+        {
+            var users = await _userRepository.SearchUsersWithTextAsync(searchText);
+            return Ok(users);
+        }
+
+        [HttpGet("explain/{name}")]
+        public async Task<IActionResult> ExplainQuery(string name)
+        {
+            var explanation = await _userRepository.ExplainQueryAsync(name);
+            return Ok(explanation);
+        }
+
+        [HttpGet("recent")]
+        public async Task<ActionResult<List<User>>> GetRecentUsers()
+        {
+            var users = await _userRepository.GetRecentUsersAsync();
+            return Ok(users);
+        }
     }
 }

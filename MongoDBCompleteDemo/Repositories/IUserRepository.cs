@@ -20,5 +20,9 @@ namespace MongoDBCompleteDemo.Repositories
         Task<List<BsonDocument>> GetUserStatisticsAsync();
         Task<List<BsonDocument>> GetUsersWithPostsAsync();
         Task<List<BsonDocument>> GetAgeGroupsAsync();
+        Task CreateIndexesAsync();
+        Task<List<User>> SearchUsersWithTextAsync(string searchText);
+        Task<string> ExplainQueryAsync(string name);
+        Task<List<User>> GetRecentUsersAsync();
     }
 }

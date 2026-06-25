@@ -46,6 +46,14 @@ A complete educational MongoDB project using the C# Driver to demonstrate backen
 * Using `$project` and `$unwind` within the pipeline
 * Creating statistical and analytical methods in the Repository and Controller layers
 
+### Day 6: Indexing and Performance
+
+* Creating Single Field Indexes, Compound Indexes, and Text Indexes
+* Implementing TTL Index for automatic document expiration
+* Using `Explain()` to analyze query performance
+* Optimizing search queries using indexes
+* Implementing `CreateIndexesAsync` method and related Controller actions
+
 ## Technologies
 
 * .NET 10
