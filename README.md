@@ -37,6 +37,15 @@ A complete educational MongoDB project using the C# Driver to demonstrate backen
 * Worked with advanced operators: $regex, $in, $gte, $lte, $and
 * Added advanced search actions in UsersController
 
+### Day 5: Aggregation Framework
+
+* Introduction to the Aggregation Pipeline and its stages
+* Using `$match` for initial filtering
+* Using `$group` for grouping and calculations (`sum`, `avg`, `count`)
+* Implementing `$lookup` to perform joins between collections (e.g., User and Post)
+* Using `$project` and `$unwind` within the pipeline
+* Creating statistical and analytical methods in the Repository and Controller layers
+
 ## Technologies
 
 * .NET 10

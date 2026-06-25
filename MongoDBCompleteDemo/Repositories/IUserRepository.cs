@@ -1,4 +1,5 @@
-﻿using MongoDBCompleteDemo.Models;
+﻿using MongoDB.Bson;
+using MongoDBCompleteDemo.Models;
 
 namespace MongoDBCompleteDemo.Repositories
 {
@@ -16,5 +17,8 @@ namespace MongoDBCompleteDemo.Repositories
         Task<List<User>> GetUsersPagedAsync(int pageNumber, int pageSize);
         Task<List<User>> GetUsersWithOperatorsAsync(List<string> tags, string emailPattern);
         Task<User?> GetUserWithProjectionAsync(string id);
+        Task<List<BsonDocument>> GetUserStatisticsAsync();
+        Task<List<BsonDocument>> GetUsersWithPostsAsync();
+        Task<List<BsonDocument>> GetAgeGroupsAsync();
     }
 }

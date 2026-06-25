@@ -107,5 +107,61 @@ namespace MongoDBCompleteDemo.Repositories
                                          .Project<User>(projection)
                                          .FirstOrDefaultAsync();
         }
+        public async Task<List<BsonDocument>> GetUserStatisticsAsync()
+        {
+            var pipeline = new BsonDocument[]
+            {
+        new BsonDocument("$match", new BsonDocument("age", new BsonDocument("$gte", 18))),
+        new BsonDocument("$group", new BsonDocument
+        {
+            { "_id", "$age" },
+            { "count", new BsonDocument("$sum", 1) },
+            { "averageAge", new BsonDocument("$avg", "$age") }
+        }),
+        new BsonDocument("$sort", new BsonDocument("averageAge", -1))
+            };
+
+            return await _usersCollection.Aggregate<BsonDocument>(pipeline).ToListAsync();
+        }
+
+        public async Task<List<BsonDocument>> GetUsersWithPostsAsync()
+        {
+            var pipeline = new BsonDocument[]
+            {
+        new BsonDocument("$lookup", new BsonDocument
+        {
+            { "from", "Posts" },
+            { "localField", "_id" },
+            { "foreignField", "authorId" },
+            { "as", "posts" }
+        }),
+        new BsonDocument("$project", new BsonDocument
+        {
+            { "fullName", 1 },
+            { "email", 1 },
+            { "postCount", new BsonDocument("$size", "$posts") },
+            { "posts", 1 }
+        })
+            };
+
+            return await _usersCollection.Aggregate<BsonDocument>(pipeline).ToListAsync();
+        }
+
+        public async Task<List<BsonDocument>> GetAgeGroupsAsync()
+        {
+            var pipeline = new BsonDocument[]
+            {
+        new BsonDocument("$group", new BsonDocument
+        {
+            // Calculate the age group bracket by dividing by 10 and flooring the result
+            { "_id", new BsonDocument("$floor", new BsonDocument("$divide", new BsonArray { "$age", 10 })) },
+            { "users", new BsonDocument("$push", "$fullName") },
+            { "count", new BsonDocument("$sum", 1) }
+        }),
+        new BsonDocument("$sort", new BsonDocument("_id", 1))
+            };
+
+            return await _usersCollection.Aggregate<BsonDocument>(pipeline).ToListAsync();
+        }
     }
 }

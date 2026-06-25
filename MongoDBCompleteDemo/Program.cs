@@ -29,4 +29,10 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+using (var scope = app.Services.CreateScope())
+{
+    var mongoContext = scope.ServiceProvider.GetRequiredService<MongoDbContext>();
+    await MongoDBCompleteDemo.Utilities.DatabaseSeeder.SeedDataAsync(mongoContext);
+}
+
 app.Run();

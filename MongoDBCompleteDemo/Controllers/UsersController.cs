@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 using MongoDBCompleteDemo.DTOs;
 using MongoDBCompleteDemo.Models;
 using MongoDBCompleteDemo.Repositories;
@@ -138,6 +139,39 @@ namespace MongoDBCompleteDemo.Controllers
             var user = await _userRepository.GetUserWithProjectionAsync(id);
             if (user == null) return NotFound();
             return Ok(user);
+        }
+
+        [HttpGet("statistics")]
+        public async Task<IActionResult> GetUserStatistics()
+        {
+            var stats = await _userRepository.GetUserStatisticsAsync();
+
+            // Convert BsonDocuments to JSON strings, then to standard objects
+            var jsonResult = stats.Select(doc => System.Text.Json.JsonSerializer.Deserialize<object>(doc.ToJson()));
+
+            return Ok(jsonResult);
+        }
+
+        [HttpGet("with-posts")]
+        public async Task<IActionResult> GetUsersWithPosts()
+        {
+            var result = await _userRepository.GetUsersWithPostsAsync();
+
+            // Convert BsonDocuments to JSON strings, then to standard objects
+            var jsonResult = result.Select(doc => System.Text.Json.JsonSerializer.Deserialize<object>(doc.ToJson()));
+
+            return Ok(jsonResult);
+        }
+
+        [HttpGet("age-groups")]
+        public async Task<IActionResult> GetAgeGroups()
+        {
+            var groups = await _userRepository.GetAgeGroupsAsync();
+
+            // Convert BsonDocuments to JSON strings, then to standard objects
+            var jsonResult = groups.Select(doc => System.Text.Json.JsonSerializer.Deserialize<object>(doc.ToJson()));
+
+            return Ok(jsonResult);
         }
     }
 }
