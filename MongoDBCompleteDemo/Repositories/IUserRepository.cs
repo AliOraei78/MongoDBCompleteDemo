@@ -11,5 +11,10 @@ namespace MongoDBCompleteDemo.Repositories
         Task DeleteUserAsync(string id);
         Task AddAddressToUserAsync(string userId, Address address);
         Task<List<User>> GetUsersWithAddressAsync();
+        Task<List<User>> SearchUsersAsync(string? name, int? minAge, int? maxAge);
+        Task<List<User>> GetUsersSortedAsync(string sortBy, bool ascending);
+        Task<List<User>> GetUsersPagedAsync(int pageNumber, int pageSize);
+        Task<List<User>> GetUsersWithOperatorsAsync(List<string> tags, string emailPattern);
+        Task<User?> GetUserWithProjectionAsync(string id);
     }
 }

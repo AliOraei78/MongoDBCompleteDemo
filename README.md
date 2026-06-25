@@ -29,6 +29,14 @@ A complete educational MongoDB project using the C# Driver to demonstrate backen
 * Create `PostRepository` and `PostsController`
 * Add new methods for working with embedded documents
 
+### Day 4: Advanced Queries
+* Implemented filtering with combined conditions and MongoDB operators
+* Used projections to select specific fields
+* Applied ascending and descending sorting
+* Implemented pagination using Skip and Limit
+* Worked with advanced operators: $regex, $in, $gte, $lte, $and
+* Added advanced search actions in UsersController
+
 ## Technologies
 
 * .NET 10

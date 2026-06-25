@@ -93,5 +93,51 @@ namespace MongoDBCompleteDemo.Controllers
             var users = await _userRepository.GetUsersWithAddressAsync();
             return Ok(users);
         }
+
+        [HttpGet("search")]
+        public async Task<ActionResult<List<User>>> SearchUsers(
+        [FromQuery] string? name,
+        [FromQuery] int? minAge,
+        [FromQuery] int? maxAge)
+        {
+            var users = await _userRepository.SearchUsersAsync(name, minAge, maxAge);
+            return Ok(users);
+        }
+
+        [HttpGet("sorted")]
+        public async Task<ActionResult<List<User>>> GetSortedUsers(
+            [FromQuery] string sortBy = "Age",
+            [FromQuery] bool ascending = true)
+        {
+            var users = await _userRepository.GetUsersSortedAsync(sortBy, ascending);
+            return Ok(users);
+        }
+
+        [HttpGet("paged")]
+        public async Task<ActionResult<List<User>>> GetPagedUsers(
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10)
+        {
+            var users = await _userRepository.GetUsersPagedAsync(pageNumber, pageSize);
+            return Ok(users);
+        }
+
+        [HttpGet("advanced")]
+        public async Task<ActionResult<List<User>>> GetUsersAdvanced(
+            [FromQuery] string? tags, 
+            [FromQuery] string? emailPattern)
+        {
+            var tagList = string.IsNullOrEmpty(tags) ? new List<string>() : tags.Split(',').ToList();
+            var users = await _userRepository.GetUsersWithOperatorsAsync(tagList, emailPattern ?? "");
+            return Ok(users);
+        }
+
+        [HttpGet("projection/{id}")]
+        public async Task<ActionResult<User>> GetUserWithProjection(string id)
+        {
+            var user = await _userRepository.GetUserWithProjectionAsync(id);
+            if (user == null) return NotFound();
+            return Ok(user);
+        }
     }
 }
