@@ -24,5 +24,8 @@ namespace MongoDBCompleteDemo.Repositories
         Task<List<User>> SearchUsersWithTextAsync(string searchText);
         Task<string> ExplainQueryAsync(string name);
         Task<List<User>> GetRecentUsersAsync();
+        Task ExecuteTransferAsync(string fromUserId, string toUserId, decimal amount);
+        Task<bool> UpdateUserWithConcurrencyAsync(User user);
+        Task<List<BsonDocument>> GetTransactionHistoryAsync();
     }
 }

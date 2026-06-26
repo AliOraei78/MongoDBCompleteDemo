@@ -2,6 +2,7 @@
 using MongoDB.Bson;
 using MongoDBCompleteDemo.Data;
 using MongoDBCompleteDemo.Models;
+using MongoDBCompleteDemo.Repositories;
 
 namespace MongoDBCompleteDemo.Utilities
 {
@@ -9,6 +10,10 @@ namespace MongoDBCompleteDemo.Utilities
     {
         public static async Task SeedDataAsync(MongoDbContext context)
         {
+            // English: Automatically spin up repository to guarantee required collection indexes exist
+            var userRepository = new UserRepository(context);
+            await userRepository.CreateIndexesAsync();
+
             // Check if data already exists to avoid duplicate seeding on every startup
             var usersExist = await context.Users.EstimatedDocumentCountAsync() > 0;
             if (usersExist)
@@ -22,6 +27,8 @@ namespace MongoDBCompleteDemo.Utilities
                 .RuleFor(u => u.FullName, f => f.Name.FullName())
                 .RuleFor(u => u.Email, (f, u) => f.Internet.Email(u.FullName))
                 .RuleFor(u => u.Age, f => f.Random.Number(18, 70))
+                .RuleFor(u => u.Version, f => 1) // English: Seed initial baseline version constraint
+                .RuleFor(u => u.Balance, f => Math.Round(f.Random.Decimal(500, 5000), 2)) // English: Seed realistic starting financial accounts
                 .RuleFor(u => u.CreatedAt, f => f.Date.Past(1))
                 .RuleFor(u => u.Address, f => new Address
                 {
@@ -51,8 +58,6 @@ namespace MongoDBCompleteDemo.Utilities
             // Insert everything into MongoDB in bulk for high performance
             await context.Users.InsertManyAsync(fakeUsers);
 
-            // Assuming your MongoDbContext has a Posts collection property
-            // If it's named differently, update it here (e.g., context.Posts)
             // English: Use the public property you already created in MongoDbContext
             await context.Posts.InsertManyAsync(fakePosts);
         }

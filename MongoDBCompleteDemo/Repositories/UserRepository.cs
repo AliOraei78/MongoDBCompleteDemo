@@ -260,5 +260,64 @@ namespace MongoDBCompleteDemo.Repositories
                 .Sort(Builders<User>.Sort.Descending(u => u.CreatedAt))
                 .ToListAsync();
         }
+
+        public async Task ExecuteTransferAsync(string fromUserId, string toUserId, decimal amount)
+        {
+            using var session = await _usersCollection.Database.Client.StartSessionAsync();
+            session.StartTransaction();
+
+            try
+            {
+                // Withdraw money from the source user
+                var withdrawFilter = Builders<User>.Filter.Eq(u => u.Id, fromUserId);
+                var withdrawUpdate = Builders<User>.Update
+                    .Inc(u => u.Balance, -amount) // Balance property must exist in the User model
+                    .Inc(u => u.Version, 1);
+
+                var withdrawResult = await _usersCollection.UpdateOneAsync(session, withdrawFilter, withdrawUpdate);
+
+                if (withdrawResult.ModifiedCount == 0)
+                    throw new Exception("Insufficient balance or user not found.");
+
+                // Deposit money into the destination user
+                var depositFilter = Builders<User>.Filter.Eq(u => u.Id, toUserId);
+                var depositUpdate = Builders<User>.Update
+                    .Inc(u => u.Balance, amount)
+                    .Inc(u => u.Version, 1);
+
+                await _usersCollection.UpdateOneAsync(session, depositFilter, depositUpdate);
+
+                await session.CommitTransactionAsync();
+            }
+            catch
+            {
+                await session.AbortTransactionAsync();
+                throw;
+            }
+        }
+
+        public async Task<bool> UpdateUserWithConcurrencyAsync(User user)
+        {
+            var filter = Builders<User>.Filter.And(
+                Builders<User>.Filter.Eq(u => u.Id, user.Id),
+                Builders<User>.Filter.Eq(u => u.Version, user.Version)
+            );
+
+            user.Version++;
+
+            var result = await _usersCollection.ReplaceOneAsync(filter, user);
+            return result.ModifiedCount > 0;
+        }
+
+        public async Task<List<BsonDocument>> GetTransactionHistoryAsync()
+        {
+            // Simple example. In a production application,
+            // Change Streams or a dedicated transaction collection should be used.
+            // English: Start fluent aggregation, apply match, then cast output to BsonDocument
+            return await _usersCollection.Aggregate()
+                .Match(new BsonDocument("balance", new BsonDocument("$exists", true)))
+                .As<BsonDocument>()
+                .ToListAsync();
+        }
     }
 }

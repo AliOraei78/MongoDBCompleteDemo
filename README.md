@@ -54,6 +54,15 @@ A complete educational MongoDB project using the C# Driver to demonstrate backen
 * Optimizing search queries using indexes
 * Implementing `CreateIndexesAsync` method and related Controller actions
 
+### Day 7: Transactions and Concurrency**
+
+* Implement multi-document transactions using MongoDB sessions.
+* Handle transaction rollback in case of errors.
+* Implement optimistic concurrency using a `Version` field.
+* Create a balance transfer (`Transfer`) method between two users.
+* Add controller actions for transaction and concurrency operations.
+
+
 ## Technologies
 
 * .NET 10

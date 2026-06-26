@@ -22,8 +22,14 @@ namespace MongoDBCompleteDemo.Models
         [BsonDefaultValue(0)]
         public int Age { get; set; }
 
+        [BsonElement("version")]
+        public int Version { get; set; } = 1;
+
         [BsonElement("createdAt")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        [BsonElement("balance")]
+        public decimal Balance { get; set; } = 1000;
 
         // Embedded Document
         [BsonElement("address")]

@@ -200,5 +200,37 @@ namespace MongoDBCompleteDemo.Controllers
             var users = await _userRepository.GetRecentUsersAsync();
             return Ok(users);
         }
+
+        [HttpPost("transfer")]
+        public async Task<IActionResult> Transfer(
+    [FromQuery] string fromUserId,
+    [FromQuery] string toUserId,
+    [FromQuery] decimal amount)
+        {
+            await _userRepository.ExecuteTransferAsync(fromUserId, toUserId, amount);
+            return Ok("Transfer completed successfully.");
+        }
+
+        [HttpPut("concurrency")]
+        public async Task<IActionResult> UpdateWithConcurrency([FromBody] User user)
+        {
+            var success = await _userRepository.UpdateUserWithConcurrencyAsync(user);
+
+            if (!success)
+                return Conflict("This record has been modified by another user. Please try again.");
+
+            return NoContent();
+        }
+
+        [HttpGet("transaction-history")]
+        public async Task<IActionResult> GetTransactionHistory()
+        {
+            var history = await _userRepository.GetTransactionHistoryAsync();
+
+            // English: Convert BsonDocuments to JSON strings, then to standard objects so Swagger doesn't freeze
+            var jsonResult = history.Select(doc => System.Text.Json.JsonSerializer.Deserialize<object>(doc.ToJson()));
+
+            return Ok(jsonResult);
+        }
     }
 }
