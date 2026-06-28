@@ -18,5 +18,6 @@ namespace MongoDBCompleteDemo.Data
 
         public IMongoCollection<User> Users => _database.GetCollection<User>("Users");
         public IMongoCollection<Post> Posts => _database.GetCollection<Post>("Posts");
+        public IMongoCollection<UserRole> UserRoles => _database.GetCollection<UserRole>("UserRoles");
     }
 }

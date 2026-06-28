@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using MongoDBCompleteDemo.DTOs;
 using MongoDBCompleteDemo.Models;
@@ -8,6 +9,8 @@ namespace MongoDBCompleteDemo.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]                  
+    [Authorize(Roles = "Admin")]
     public class UsersController : ControllerBase
     {
         private readonly IUserRepository _userRepository;

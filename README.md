@@ -62,6 +62,14 @@ A complete educational MongoDB project using the C# Driver to demonstrate backen
 * Create a balance transfer (`Transfer`) method between two users.
 * Add controller actions for transaction and concurrency operations.
 
+### Day 8: Authentication and Security
+
+* Configure a secure Connection String with Authentication
+* Implement Role-Based Access Control (RBAC)
+* Create the `UserRole` model and repository
+* Implement JWT Authentication and Authorization in ASP.NET Core
+* Protect controllers using the `[Authorize]` attribute
+
 
 ## Technologies
 

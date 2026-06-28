@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MongoDBCompleteDemo.DTOs;
 using MongoDBCompleteDemo.Models;
@@ -8,6 +9,8 @@ namespace MongoDBCompleteDemo.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]                 
+    [Authorize(Roles = "Admin")]
     public class PostsController : ControllerBase
     {
         private readonly IPostRepository _postRepository;
