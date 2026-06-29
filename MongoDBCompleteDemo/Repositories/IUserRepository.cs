@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson;
+using MongoDBCompleteDemo.DTOs;
 using MongoDBCompleteDemo.Models;
 
 namespace MongoDBCompleteDemo.Repositories
@@ -27,5 +28,9 @@ namespace MongoDBCompleteDemo.Repositories
         Task ExecuteTransferAsync(string fromUserId, string toUserId, decimal amount);
         Task<bool> UpdateUserWithConcurrencyAsync(User user);
         Task<List<BsonDocument>> GetTransactionHistoryAsync();
+        Task<UserDto> CreateUserAsync(CreateUserDto dto);
+        Task<UserDto?> GetUserByIdDtoAsync(string id);
+        Task<List<UserDto>> GetAllUsersDtoAsync();
+        Task WatchChangesAsync();
     }
 }

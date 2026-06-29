@@ -2,5 +2,6 @@
   <Folder Name="/Solution Items/">
     <File Path="README.md" />
   </Folder>
+  <Project Path="MongoDBCompleteDemo.Tests/MongoDBCompleteDemo.Tests.csproj" Id="f552428f-2508-4460-b3b1-20dd32dddbc1" />
   <Project Path="MongoDBCompleteDemo/MongoDBCompleteDemo.csproj" />
 </Solution>

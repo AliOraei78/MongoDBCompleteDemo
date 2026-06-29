@@ -1,4 +1,5 @@
 ﻿using MongoDB.Driver;
+using MongoDB.Driver.GridFS;
 using MongoDBCompleteDemo.Models;
 
 namespace MongoDBCompleteDemo.Data
@@ -6,6 +7,7 @@ namespace MongoDBCompleteDemo.Data
     public class MongoDbContext
     {
         private readonly IMongoDatabase _database;
+        public GridFSBucket GridFs => new GridFSBucket(_database);
 
         public MongoDbContext(IConfiguration configuration)
         {

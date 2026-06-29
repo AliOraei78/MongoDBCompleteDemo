@@ -20,22 +20,22 @@ namespace MongoDBCompleteDemo.Controllers
             _userRepository = userRepository;
         }
 
-        // Create
-        [HttpPost]
-        public async Task<IActionResult> CreateUser([FromBody] CreateUserDto createUserDto)
-        {
-            // Map DTO to the actual User Domain Model
-            var user = new User
-            {
-                FullName = createUserDto.FullName,
-                Email = createUserDto.Email,
-                Age = createUserDto.Age
-                // Id is left out entirely; MongoDB will auto-generate it!
-            };
+        //// Create
+        //[HttpPost]
+        //public async Task<IActionResult> CreateUser([FromBody] CreateUserDto createUserDto)
+        //{
+        //    // Map DTO to the actual User Domain Model
+        //    var user = new User
+        //    {
+        //        FullName = createUserDto.FullName,
+        //        Email = createUserDto.Email,
+        //        Age = createUserDto.Age
+        //        // Id is left out entirely; MongoDB will auto-generate it!
+        //    };
 
-            await _userRepository.CreateUserAsync(user);
-            return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, user);
-        }
+        //    await _userRepository.CreateUserAsync(user);
+        //    return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, user);
+        //}
 
         // Read All
         [HttpGet]
@@ -45,14 +45,15 @@ namespace MongoDBCompleteDemo.Controllers
             return Ok(users);
         }
 
-        // Read By Id
-        [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUserById(string id)
-        {
-            var user = await _userRepository.GetUserByIdAsync(id);
-            if (user == null) return NotFound();
-            return Ok(user);
-        }
+        //// Read By Id
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<User>> GetUserById(string id)
+        //{
+        //    var user = await _userRepository.GetUserByIdAsync(id);
+        //    if (user == null) return NotFound();
+        //    return Ok(user);
+        //}
+
         // Update
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(string id, [FromBody] UpdateUserDto updateUserDto)
@@ -234,6 +235,41 @@ namespace MongoDBCompleteDemo.Controllers
             var jsonResult = history.Select(doc => System.Text.Json.JsonSerializer.Deserialize<object>(doc.ToJson()));
 
             return Ok(jsonResult);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<UserDto>> CreateUserDto([FromBody] CreateUserDto dto)
+        {
+            var user = await _userRepository.CreateUserAsync(dto);
+            return CreatedAtAction(nameof(GetUserByIdDto), new { id = user.Id }, user);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<UserDto>> GetUserByIdDto(string id)
+        {
+            var user = await _userRepository.GetUserByIdDtoAsync(id);
+            if (user == null) return NotFound();
+            return Ok(user);
+        }
+
+        [HttpGet("watch-test")]
+        public IActionResult StartWatchTest()
+        {
+            // English: Run the change stream listener in the background
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await _userRepository.WatchChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    // English: Print the exact error if the database is not a Replica Set
+                    System.Diagnostics.Debug.WriteLine($"[CHANGE STREAM ERROR]: {ex.Message}");
+                }
+            });
+
+            return Ok("Listener started.");
         }
     }
 }

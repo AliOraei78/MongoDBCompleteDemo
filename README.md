@@ -70,6 +70,20 @@ A complete educational MongoDB project using the C# Driver to demonstrate backen
 * Implement JWT Authentication and Authorization in ASP.NET Core
 * Protect controllers using the `[Authorize]` attribute
 
+### Day 9: Full Integration with ASP.NET Core Web API
+* Complete implementation of the Repository Pattern
+* Use DTOs to separate application layers
+* Implement validation using Data Annotations
+* Resolve route conflicts in Swagger
+
+### Day 10: Advanced Features & Best Practices**
+
+* Implementing **Change Streams** for real-time monitoring
+* Setting up **GridFS** for file storage
+* Professional **Logging** and **Configuration**
+* **Global Exception Handling Middleware**
+* **Error Handling** and **Unit Testing** best practices
+
 
 ## Technologies
 

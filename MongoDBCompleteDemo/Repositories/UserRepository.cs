@@ -1,8 +1,8 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
-using MongoDB.Driver;
 using MongoDBCompleteDemo.Data;
+using MongoDBCompleteDemo.DTOs;
 using MongoDBCompleteDemo.Models;
 
 namespace MongoDBCompleteDemo.Repositories
@@ -319,5 +319,67 @@ namespace MongoDBCompleteDemo.Repositories
                 .As<BsonDocument>()
                 .ToListAsync();
         }
+        public async Task<UserDto> CreateUserAsync(CreateUserDto dto)
+        {
+            var user = new User
+            {
+                FullName = dto.FullName,
+                Email = dto.Email,
+                Age = dto.Age,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            await _usersCollection.InsertOneAsync(user);
+
+            return new UserDto
+            {
+                Id = user.Id,
+                FullName = user.FullName,
+                Email = user.Email,
+                Age = user.Age,
+            };
+        }
+
+        public async Task<UserDto?> GetUserByIdDtoAsync(string id)
+        {
+            var user = await _usersCollection.Find(u => u.Id == id).FirstOrDefaultAsync();
+            if (user == null) return null!;
+
+            return new UserDto
+            {
+                Id = user.Id,
+                FullName = user.FullName,
+                Email = user.Email,
+                Age = user.Age,
+            };
+        }
+
+        public async Task<List<UserDto>> GetAllUsersDtoAsync()
+        {
+            var users = await _usersCollection.Find(_ => true).ToListAsync();
+
+            return users.Select(user => new UserDto
+            {
+                Id = user.Id,
+                FullName = user.FullName,
+                Email = user.Email,
+                Age = user.Age,
+            }).ToList();
+        }
+        public async Task WatchChangesAsync()
+        {
+            var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<User>>()
+                .Match(change => change.OperationType == ChangeStreamOperationType.Insert ||
+                                 change.OperationType == ChangeStreamOperationType.Update);
+
+            using var cursor = await _usersCollection.WatchAsync(pipeline);
+
+            await foreach (var change in cursor.ToAsyncEnumerable())
+            {
+                // English: Use Debug.WriteLine instead of Console.WriteLine to see it in VS Output Window
+                System.Diagnostics.Debug.WriteLine($"[CHANGE STREAM] Type: {change.OperationType} - UserId: {change.FullDocument?.Id}");
+            }
+        }
+
     }
 }
